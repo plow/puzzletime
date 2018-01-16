@@ -5,7 +5,7 @@ pushd /opt/app-root/src
 echo $BUILD_INFO > BUILD_INFO
 
 # load demo seeds when demo instance
-if [ $DEMO_INSTANCE -eq 1 ]; then
+if [ "$DEMO_INSTANCE" -eq 1 ]; then
   echo 'demo instance: creating symlink for loading demo seeds'
   cd db/seeds
   ln -s demo production
