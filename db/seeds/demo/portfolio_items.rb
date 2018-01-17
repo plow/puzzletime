@@ -5,12 +5,8 @@
 
 
 PortfolioItem.seed(:name,
-  { name: 'Java EE' },
+  { name: 'Java' },
 
-  { name: 'Ruby on Rails' },
+  { name: 'Ruby on Rails' }
 
-  { name: 'Middleware' },
-
-  { name: 'Eclipse RCP',
-    active: false }
 )

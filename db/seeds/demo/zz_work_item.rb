@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 clients = WorkItem.seed(:shortname, :parent_id,
   { shortname: 'PITC',
     name: 'Puzzle ITC' },
@@ -22,7 +21,7 @@ Client.seed(:work_item_id,
     sector_id: Sector.find_by_name('Verwaltung').id },
 
   { work_item_id: clients[2].id,
-    sector_id: Sector.find_by_name('Öffentlicher Verkehr').id },
+    sector_id: Sector.find_by_name('Öffentlicher Verkehr').id }
 )
 
 categories = WorkItem.seed(:shortname, :parent_id,
@@ -32,11 +31,7 @@ categories = WorkItem.seed(:shortname, :parent_id,
 
   { shortname: 'EVE',
     name: 'Events',
-    parent_id: clients[0].id },
-
-  { shortname: 'FIS',
-    name: 'FIS',
-    parent_id: clients[2].id }
+    parent_id: clients[0].id }
 )
 
 orders = WorkItem.seed(:shortname, :parent_id,
@@ -46,83 +41,21 @@ orders = WorkItem.seed(:shortname, :parent_id,
 
   { shortname: 'TTA',
     name: 'Tech Talk',
-    parent_id: categories[1].id },
-
-  { shortname: 'WSH',
-    name: 'Workshops',
-    parent_id: categories[1].id },
-
-  { shortname: 'ENC',
-    name: 'enClouder',
-    parent_id: clients[1].id },
-
-  { shortname: 'GPA',
-    name: 'Grundpacket',
-    parent_id: categories[2].id },
-
-  { shortname: 'ERW',
-    name: 'Erweiterungen',
-    parent_id: categories[2].id },
-
-  { shortname: 'DIS',
-    name: 'Driver Info',
-    parent_id: clients[2].id },
+    parent_id: categories[1].id }
 )
 
 Order.seed(:work_item_id,
   # Puzzletime
   { work_item_id: orders[0].id,
-    kind_id: OrderKind.find_by_name('Projekt').id,
-    responsible_id: Employee.find_by_shortname('AR').id,
+    kind_id: OrderKind.find_by_name('Werkvertrag').id,
+    responsible_id: Employee.find_by_shortname('BL').id,
     status_id: OrderStatus.find_by_name('Bearbeitung').id,
-    department_id: Department.find_by_name('/dev/two').id,
-    order_team_members: %w(BS PZ DI).map {|short| OrderTeamMember.new(employee: Employee.find_by_shortname(short)) }},
+    department_id: Department.find_by_name('Entwicklung').id,
+    order_team_members: %w(BL PL).map {|short| OrderTeamMember.new(employee: Employee.find_by_shortname(short)) }}
 
-  # Tech Talk
-  { work_item_id: orders[1].id,
-    kind_id: OrderKind.find_by_name('Consulting').id,
-    responsible_id: Employee.find_by_shortname('MW').id,
-    status_id: OrderStatus.find_by_name('Bearbeitung').id,
-    department_id: Department.find_by_name('/dev/one').id  },
-
-  # Workshops
-  { work_item_id: orders[2].id,
-    kind_id: OrderKind.find_by_name('Consulting').id,
-    responsible_id: Employee.find_by_shortname('BS').id,
-    status_id: OrderStatus.find_by_name('Bearbeitung').id,
-    department_id: Department.find_by_name('/dev/two').id  },
-
-  # Enclouder
-  { work_item_id: orders[3].id,
-    kind_id: OrderKind.find_by_name('Mandat').id,
-    responsible_id: Employee.find_by_shortname('AR').id,
-    status_id: OrderStatus.find_by_name('Bearbeitung').id,
-    department_id: Department.find_by_name('/dev/two').id,
-    order_team_members: %w(PZ BS).map {|short| OrderTeamMember.new(employee: Employee.find_by_shortname(short)) }},
-
-  # FIS Grundpacket
-  { work_item_id: orders[4].id,
-    kind_id: OrderKind.find_by_name('Mandat').id,
-    responsible_id: Employee.find_by_shortname('AR').id,
-    status_id: OrderStatus.find_by_name('Abgeschlossen').id,
-    department_id: Department.find_by_name('/dev/two').id  },
-
-  # FIS Erweiterungen
-  { work_item_id: orders[5].id,
-    kind_id: OrderKind.find_by_name('Mandat').id,
-    responsible_id: Employee.find_by_shortname('AR').id,
-    status_id: OrderStatus.find_by_name('Abschluss').id,
-    department_id: Department.find_by_name('/dev/two').id,
-    order_team_members: [OrderTeamMember.new(employee: Employee.find_by_shortname('DI'))] },
-
-  # DIS
-  { work_item_id: orders[6].id,
-    kind_id: OrderKind.find_by_name('Mandat').id,
-    responsible_id: Employee.find_by_shortname('BS').id,
-    status_id: OrderStatus.find_by_name('Bearbeitung').id,
-    department_id: Department.find_by_name('/dev/two').id,
-    order_team_members: [OrderTeamMember.new(employee: Employee.find_by_shortname('DI'))] },
 )
+
+
 
 accounting_posts = WorkItem.seed(:shortname, :parent_id,
   { shortname: 'OPF',
@@ -131,31 +64,7 @@ accounting_posts = WorkItem.seed(:shortname, :parent_id,
 
   { shortname: 'ERP',
     name: 'Version ERP',
-    parent_id: orders[0].id },
-
-  { shortname: 'E13',
-    name: 'Erweiterungen 2013',
-    parent_id: orders[3].id },
-
-  { shortname: 'E14',
-    name: 'Erweiterungen 2014',
-    parent_id: orders[3].id },
-
-  { shortname: 'GP0',
-    name: 'Grundpacket 0',
-    parent_id: orders[4].id },
-
-  { shortname: 'BAE',
-    name: 'Backend',
-    parent_id: orders[5].id },
-
-  { shortname: 'FRE',
-    name: 'Frontend',
-    parent_id: orders[5].id },
-
-  { shortname: 'MID',
-    name: 'Middleware',
-    parent_id: orders[5].id }
+    parent_id: orders[0].id }
 )
 
 AccountingPost.seed(:work_item_id,
@@ -171,75 +80,6 @@ AccountingPost.seed(:work_item_id,
     portfolio_item_id: PortfolioItem.find_by_name('Ruby on Rails').id,
     service_id: Service.find_by_name('Software-Entwicklung').id,
     offered_hours: 500,
-    billable: false },
+    billable: false }
 
-  # Enclouder 2013
-  { work_item_id: accounting_posts[2].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Ruby on Rails').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 800,
-    offered_rate: 150,
-    billable: true,
-    closed: true },
-
-  # Enclouder 2014
-  { work_item_id: accounting_posts[3].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Ruby on Rails').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 600,
-    offered_rate: 160,
-    billable: true },
-
-  # FIS Grundpacket 0
-  { work_item_id: accounting_posts[4].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 200,
-    offered_rate: 140,
-    billable: true,
-    closed: true },
-
-  # FIS Backend
-  { work_item_id: accounting_posts[5].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 2000,
-    offered_rate: 140,
-    billable: true },
-
-  # FIS Frontend
-  { work_item_id: accounting_posts[6].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 1200,
-    offered_rate: 140,
-    billable: true },
-
-  # FIS Middleware
-  { work_item_id: accounting_posts[7].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 200,
-    offered_rate: 150,
-    billable: true },
-
-  # TechTalk
-  { work_item_id: orders[1].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Beratung').id,
-    billable: false },
-
-  # Workshops
-  { work_item_id: orders[2].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Beratung').id,
-    billable: false },
-
-  # DIS
-  { work_item_id: orders[6].id,
-    portfolio_item_id: PortfolioItem.find_by_name('Java EE').id,
-    service_id: Service.find_by_name('Software-Entwicklung').id,
-    offered_hours: 5000,
-    offered_rate: 145,
-    billable: true },
 )

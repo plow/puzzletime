@@ -5,15 +5,12 @@
 
 
 Department.seed(:shortname,
-  { name: '/dev/one',
-    shortname: 'D1' },
+  { name: 'Entwicklung',
+    shortname: 'EN' },
 
-  { name: '/dev/two',
-    shortname: 'D2' },
+  { name: 'Marketing',
+    shortname: 'MA' },
 
-  { name: '/sys',
-    shortname: 'SY' },
-
-  { name: '/ux',
-    shortname: 'UX' },
+  { name: 'Verkauf',
+    shortname: 'VE' }
 )

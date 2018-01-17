@@ -5,7 +5,7 @@
 
 
 OrderKind.seed(:name,
-  { name: 'Mandat' },
-  { name: 'Projekt' },
-  { name: 'Consulting' }
+  { name: 'Werkvertrag' },
+  { name: 'Dienstleistungsvertrag' },
+  { name: 'Internes Projekt' }
 )
