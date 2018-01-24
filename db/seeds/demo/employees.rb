@@ -5,24 +5,24 @@
 
 
 employees = Employee.seed(:shortname,
-  { firstname: 'Bereichs-',
-    lastname: 'Leiter',
+  { firstname: '',
+    lastname: 'Bereichsleiter',
     shortname: 'BL',
-    passwd: '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', # a
+    passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'bl@puzzletime.ch',
     management: true },
 
-  { firstname: 'Projekt-',
-    lastname: 'Leiter',
+  { firstname: '',
+    lastname: 'Projektleiter',
     shortname: 'PL',
-    passwd: '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', # a
+    passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'pl@puzzletime.ch',
     management: false },
 
-  { firstname: 'Mit-',
-    lastname: 'Arbeiter',
+  { firstname: '',
+    lastname: 'Mitarbeiter',
     shortname: 'MA',
-    passwd: '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', # a
+    passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'ma@puzzletime.ch',
     management: false }
 )
@@ -30,13 +30,13 @@ employees = Employee.seed(:shortname,
 Employment.seed(:employee_id, :start_date,
   { employee_id: employees[0].id,
     percent: 100,
-    start_date: Date.today - 2 },
+    start_date: Date.today.last_month.last_month.at_beginning_of_month },
 
   { employee_id: employees[1].id,
     percent: 90,
-    start_date: Date.today - 1 },
+    start_date: Date.today.at_beginning_of_month },
 
   { employee_id: employees[2].id,
     percent: 80,
-    start_date: Date.today },
+    start_date: Date.today.last_month.at_beginning_of_month },
 )

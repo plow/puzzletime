@@ -5,17 +5,12 @@
 
 
 Contact.seed(:client_id, :lastname,
-  { client_id: WorkItem.where(parent_id: nil, name: 'Swisscom AG').first!.id,
+  { client_id: WorkItem.where(parent_id: nil, shortname: 'GVB').first!.id,
     lastname: 'von Gunten',
     firstname: 'Thomas',
-    function: 'Informatiker' },
+    function: 'Produkt Manager' },
 
-  { client_id: WorkItem.where(parent_id: nil, name: 'BLS AG').first!.id,
-    lastname: 'Meier',
-    firstname: 'Hans',
-    function: 'Einkäufer' },
-
-  { client_id: WorkItem.where(parent_id: nil, name: 'BLS AG').first!.id,
+  { client_id: WorkItem.where(parent_id: nil, shortname: 'BLS').first!.id,
     lastname: 'Freiburghaus',
     firstname: 'Franz',
     function: 'Projektleiter' }

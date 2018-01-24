@@ -7,9 +7,9 @@
 Sector.seed(:name,
   { name: 'Öffentlicher Verkehr' },
 
-  { name: 'Verwaltung' },
+  { name: 'Versicherung' },
 
-  { name: 'Versicherungen' },
+  { name: 'Informatik' },
 
   { name: 'Banken',
     active: false }
