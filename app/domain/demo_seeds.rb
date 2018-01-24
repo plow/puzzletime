@@ -5,20 +5,16 @@
 
 
 module DemoSeeds
+  # Access the active Invoicing class here
+  cattr_accessor :instance
 
   def self.init
-    return if openshift_build?
     if demo_instance?
       ReseedJob.new.schedule if Delayed::Job.table_exists?
     end
   end
 
   private
-
-  # db is not connected during openshift build
-  def self.openshift_build?
-    !ActiveRecord::Base.connected?
-  end
 
   def self.demo_instance?
     ENV['DEMO_INSTANCE'] == '1'
