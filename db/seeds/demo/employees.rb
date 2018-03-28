@@ -5,21 +5,21 @@
 
 
 employees = Employee.seed(:shortname,
-  { firstname: '',
+  { firstname: 'Vorname',
     lastname: 'Bereichsleiter',
     shortname: 'BL',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'bl@puzzletime.ch',
     management: true },
 
-  { firstname: '',
+  { firstname: 'Vorname',
     lastname: 'Projektleiter',
     shortname: 'PL',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'pl@puzzletime.ch',
     management: false },
 
-  { firstname: '',
+  { firstname: 'Vorname',
     lastname: 'Mitarbeiter',
     shortname: 'MA',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
