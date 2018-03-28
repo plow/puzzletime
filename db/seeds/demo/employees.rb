@@ -5,25 +5,28 @@
 
 
 employees = Employee.seed(:shortname,
-  { firstname: 'Vorname',
-    lastname: 'Bereichsleiter',
+  { firstname: 'Leiter',
+    lastname: 'Bereichs',
     shortname: 'BL',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'bl@puzzletime.ch',
+    eval_periods: ["0d", "0m", "-1m", "0y"],
     management: true },
 
-  { firstname: 'Vorname',
-    lastname: 'Projektleiter',
+  { firstname: 'Leiter',
+    lastname: 'Projekt',
     shortname: 'PL',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'pl@puzzletime.ch',
+    eval_periods: ["0d", "0m", "-1m", "0y"],
     management: false },
 
-  { firstname: 'Vorname',
-    lastname: 'Mitarbeiter',
+  { firstname: 'Arbeiter',
+    lastname: 'Mit',
     shortname: 'MA',
     passwd: '89e495e7941cf9e40e6980d14a16bf023ccd4c91', # demo
     email: 'ma@puzzletime.ch',
+    eval_periods: ["0d", "0m", "-1m", "0y"],
     management: false }
 )
 
