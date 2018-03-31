@@ -93,11 +93,11 @@ employees.map do |employee_shortname,work_item_id|
   date = Employee.find_by_shortname(employee_shortname).employments.last.start_date
   while date <= Date.today
     unless Holiday.holiday?(date) #skip weekend
-      Ordertime.seed(
+      Ordertime.seed(:employee_id, :work_item_id, :work_date,
         { employee_id: Employee.find_by_shortname(employee_shortname).id,
           report_type: "absolute_day",
           work_date: date,
-          hours: rand(5.0 .. 10.0).round(2),
+          hours: rand(7.0 .. 9.5).round(2),
           billable: true,
           type: "Ordertime",
           work_item_id: work_item_id }
@@ -114,7 +114,7 @@ employees.map do |employee_shortname,work_item_id|
   date = Date.today.at_beginning_of_week
   while date < (Date.today + 90)
     unless Holiday.holiday?(date) #skip weekend
-      Planning.seed(
+      Planning.seed(:employee_id, :work_item_id, :date,
         { employee_id: employee.id,
           work_item_id: work_item_id,
           date: date,
