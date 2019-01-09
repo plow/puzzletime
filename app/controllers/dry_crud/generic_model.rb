@@ -21,7 +21,8 @@ module DryCrud
 
       private
 
-      delegate :model_class, :models_label, :model_identifier, to: 'self.class'
+      delegate :model_class, :models_label, :model_identifier, :model_serializer,
+               to: 'self.class'
     end
 
     # The scope where model entries will be listed and created.
@@ -75,6 +76,10 @@ module DryCrud
       # I.e., the symbol of the underscored model name.
       def model_identifier
         @model_identifier ||= model_class.model_name.param_key
+      end
+
+      def model_serializer
+        @model_serializer ||= "#{model_class.name}Serializer".constantize
       end
 
       # A human readable plural name of the model.

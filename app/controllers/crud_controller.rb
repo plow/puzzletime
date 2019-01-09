@@ -13,9 +13,7 @@
 # subclasses.
 # With the help of additional callbacks, it is possible to hook into the
 # action procedures without overriding the entire method.
-class CrudController < ListController
-
-  include ActionView::Helpers::TagHelper
+class CrudController < ReadController
 
   class_attribute :permitted_attrs
 
@@ -36,26 +34,27 @@ class CrudController < ListController
 
   ##############  ACTIONS  ############################################
 
-  # Show one entry of this model.
-  #   GET /entries/1
-  #   GET /entries/1.json
-  def show
-  end
 
-  # Display a form to create a new entry of this model.
   #   GET /entries/new
   #   GET /entries/new.json
+  #
+  # Display a form to create a new entry of this model.
   def new
     assign_attributes if params[model_identifier]
   end
 
-  # Create a new entry of this model from the passed params.
-  # There are before and after create callbacks to hook into the action.
-  # To customize the response, you may overwrite this action and call
-  # super with a block that gets the format parameter.
-  # Specify a :location option if you wish to do a custom redirect.
   #   POST /entries
   #   POST /entries.json
+  #
+  # Create a new entry of this model from the passed params.
+  # There are before and after create callbacks to hook into the action.
+  #
+  # To customize the response for certain formats, you may overwrite
+  # this action and call super with a block that gets the format and
+  # success parameters. Calling a format action (e.g. format.html)
+  # in the given block will take precedence over the one defined here.
+  #
+  # Specify a :location option if you wish to do a custom redirect.
   def create(options = {})
     assign_attributes
     created = with_callbacks(:create, :save) { entry.save }
@@ -64,28 +63,40 @@ class CrudController < ListController
       yield(format, created) if block_given?
       if created
         format.html { redirect_on_success(options) }
-        format.json { render :show, status: :created, location: show_path }
+        format.json do
+          render json: entry,
+                 status: :created,
+                 location: show_path,
+                 serializer: model_serializer,
+                 include: '**'
         format.js   { render plain: "'#{js_entry.to_json}'" }
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new }
         format.json { render json: entry.errors, status: :unprocessable_entity }
         format.js   { render partial: 'form', status: :unprocessable_entity }
       end
     end
   end
 
-  # Display a form to edit an exisiting entry of this model.
   #   GET /entries/1/edit
+  #
+  # Display a form to edit an exisiting entry of this model.
   def edit
   end
 
-  # Update an existing entry of this model from the passed params.
-  # There are before and after update callbacks to hook into the action.
-  # To customize the response, you may overwrite this action and call
-  # super with a block that gets the format parameter.
-  # Specify a :location option if you wish to do a custom redirect.
   #   PUT /entries/1
   #   PUT /entries/1.json
+  #
+  # Update an existing entry of this model from the passed params.
+  # There are before and after update callbacks to hook into the action.
+  #
+  # To customize the response for certain formats, you may overwrite
+  # this action and call super with a block that gets the format and
+  # success parameters. Calling a format action (e.g. format.html)
+  # in the given block will take precedence over the one defined here.
+  #
+  # Specify a :location option if you wish to do a custom redirect.
   def update(options = {})
     assign_attributes
     updated = with_callbacks(:update, :save) { entry.save }
@@ -94,23 +105,34 @@ class CrudController < ListController
       yield(format, updated) if block_given?
       if updated
         format.html { redirect_on_success(options) }
-        format.json { render :show, status: :ok, location: show_path }
+        format.json do
+          render json: entry,
+                 status: :ok,
+                 location: show_path,
+                 serializer: model_serializer,
+                 include: '**'
         format.js   { render plain: "'#{js_entry.to_json}'" }
+        end
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit }
         format.json { render json: entry.errors, status: :unprocessable_entity }
         format.js   { render partial: 'form', status: :unprocessable_entity }
       end
     end
   end
 
-  # Destroy an existing entry of this model.
-  # There are before and after destroy callbacks to hook into the action.
-  # To customize the response, you may overwrite this action and call
-  # super with a block that gets success and format parameters.
-  # Specify a :location option if you wish to do a custom redirect.
   #   DELETE /entries/1
   #   DELETE /entries/1.json
+  #
+  # Destroy an existing entry of this model.
+  # There are before and after destroy callbacks to hook into the action.
+  #
+  # To customize the response for certain formats, you may overwrite
+  # this action and call super with a block that gets format and
+  # success parameters. Calling a format action (e.g. format.html)
+  # in the given block will take precedence over the one defined here.
+  #
+  # Specify a :location option if you wish to do a custom redirect.
   def destroy(options = {})
     destroyed = run_callbacks(:destroy) { entry.destroy }
 
@@ -168,7 +190,8 @@ class CrudController < ListController
 
   # Perform a redirect after a successfull operation and set a flash notice.
   def redirect_on_success(options = {})
-    location = options[:location] || index_path
+    location = options[:location] ||
+      (entry.destroyed? ? index_path : show_path)
     flash[:notice] ||= flash_message(:success)
     redirect_to location
   end

@@ -5,13 +5,15 @@
 
 
 class EmployeesController < ManageController
+  include Scopable
+  prepend RenderJsonApi
 
   self.permitted_attrs = [:firstname, :lastname, :shortname, :email, :ldapname,
                           :department_id, :crm_key, :probation_period_end_date,
                           :graduation, :management, :phone_office, :phone_private,
                           :street, :postal_code, :city, :birthday, :emergency_contact_name,
                           :emergency_contact_phone, :marital_status,
-                          :social_insurance, :additional_information,
+                          :social_insurance, :additional_information, :scope,
                           nationalities: []]
 
   if Settings.employees.initial_vacation_days_editable
@@ -23,12 +25,16 @@ class EmployeesController < ManageController
   self.sort_mappings = { department_id: 'departments.name' }
 
   def show
-    if Crm.instance.present?
-      person = Crm.instance.find_people_by_email(entry.email).first
-      if person
-        redirect_to Crm.instance.contact_url(person.id)
-      else
-        flash[:alert] = "Person mit Email '#{entry.email}' nicht gefunden in CRM."
+    super do |format|
+      format.html do
+        if Crm.instance.present?
+          person = Crm.instance.find_people_by_email(entry.email).first
+          if person
+            redirect_to Crm.instance.contact_url(person.id)
+          else
+            flash[:alert] = "Person mit Email '#{entry.email}' nicht gefunden in CRM."
+          end
+        end
       end
     end
   end
@@ -70,6 +76,6 @@ class EmployeesController < ManageController
   private
 
   def list_entries
-    super.includes(:department).references(:department)
+    scope_entries_by(super.includes(:department).references(:department), :current)
   end
 end

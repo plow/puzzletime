@@ -38,8 +38,12 @@ Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: :firefox, desired_capabilities: capa)
 end
 
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-Capybara.default_driver = :selenium
+Capybara.default_driver = :chrome
 Capybara.default_max_wait_time = 5
 
 unless ENV['HEADLESS'] == 'false'

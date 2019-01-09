@@ -5,8 +5,10 @@
 
 
 Rails.application.routes.draw do
-
   root to: 'worktimes#index'
+
+  mount Rswag::Ui::Engine => '/apidocs'
+  get 'apidocs', to: 'apidocs#show', constraints: { format: 'json' }
 
   resources :absences, except: [:show]
 

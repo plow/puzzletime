@@ -1,9 +1,3 @@
-#  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
-#  PuzzleTime and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/puzzle/puzzletime.
-
-
 # Abstract controller providing a basic list action.
 # The loaded model entries are available in the view as an instance variable
 # named after the +model_class+ or by the helper method +entries+.
@@ -23,20 +17,34 @@ class ListController < ApplicationController
   authorize_resource except: :index
   before_action :authorize_class, only: :index
 
+  before_action :set_variant, only: :index
+
+  delegate :list_serializer, to: 'self.class'
+
   define_render_callbacks :index
 
   helper_method :entries
 
   ##############  ACTIONS  ############################################
 
-  # List all entries of this model.
   #   GET /entries
   #   GET /entries.json
+  #
+  # List all entries of this model.
   def index
-    entries
+    respond_to do |format|
+      format.html { entries }
+      format.js { entries }
+      format.json { json_render_entries }
+      yield(format) if block_given?
+    end
   end
 
   private
+
+  def json_render_entries
+    render json: entries, each_serializer: list_serializer, root: model_identifier.pluralize
+  end
 
   # Helper method to access the entries to be displayed in the current index
   # page in an uniform way.
@@ -51,8 +59,27 @@ class ListController < ApplicationController
   # <tt>ActiveRecord::Relation</tt>.
   # Some of the modules included extend this method.
   def list_entries
-    entries = model_class.respond_to?(:list) ? model_scope.list : model_scope
-    entries.page(params[:page])
+    paged(model_scope.list)
+  end
+
+  def set_variant
+    request.variant = :tabbed if parent
+  end
+
+  def page_size
+    params.fetch(:page_size, 25)
+  end
+
+  def paged(scope)
+    scope.page(params[:page]).per(page_size)
+  end
+
+  class << self
+
+    def list_serializer
+      model_serializer
+    end
+
   end
 
   def authorize_class
@@ -62,4 +89,5 @@ class ListController < ApplicationController
   # Include these modules after the #list_entries method is defined.
   include DryCrud::Searchable
   include DryCrud::Sortable
+
 end
