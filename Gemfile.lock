@@ -139,6 +139,7 @@ GEM
     delayed_job_active_record (4.1.3)
       activerecord (>= 3.0, < 5.3)
       delayed_job (>= 3.0, < 5)
+<<<<<<< HEAD
     docile (1.3.1)
     dry-configurable (0.7.0)
       concurrent-ruby (~> 1.0)
@@ -168,6 +169,17 @@ GEM
       dry-logic (~> 0.4, >= 0.4.0)
       dry-types (~> 0.13.1)
     erubi (1.8.0)
+=======
+    docile (1.1.5)
+    dry_crud_jsonapi (0.1.0)
+      jsonapi-rails (~> 0.3.1)
+      rails (~> 5.0)
+    dry_crud_jsonapi_swagger (0.1.0)
+      dry_crud_jsonapi (~> 0.1.0)
+      rswag-ui (~> 2.0.5)
+      swagger-blocks (~> 2.0.2)
+    erubi (1.6.1)
+>>>>>>> Gemify dry_crud_jsonapi and dry_crud_jsonapi_swagger
     execjs (2.7.0)
 <<<<<<< HEAD
     fabrication (2.20.1)
@@ -470,6 +482,8 @@ DEPENDENCIES
   database_cleaner
   delayed_cron_job
   delayed_job_active_record
+  dry_crud_jsonapi
+  dry_crud_jsonapi_swagger
   fabrication
   faker
   gemsurance
@@ -479,7 +493,6 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-ui-rails
-  jsonapi-rails
   kaminari
   kaminari-bootstrap
   m
@@ -505,7 +518,6 @@ DEPENDENCIES
   request_profiler
   request_store
   rqrcode
-  rswag-ui
   rubocop
   rubocop-checkstyle_formatter
   sass-rails
