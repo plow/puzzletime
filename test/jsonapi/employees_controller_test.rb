@@ -62,6 +62,6 @@ class EmployeesControllerTest < ActionController::TestCase
   end
 
   def response_json
-    ActiveSupport::HashWithIndifferentAccess.new(JSON.parse(response.body)) rescue nil
+    ActiveSupport::HashWithIndifferentAccess.new(JSON.parse(response.body))
   end
 end
