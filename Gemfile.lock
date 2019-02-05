@@ -139,7 +139,6 @@ GEM
     delayed_job_active_record (4.1.3)
       activerecord (>= 3.0, < 5.3)
       delayed_job (>= 3.0, < 5)
-<<<<<<< HEAD
     docile (1.3.1)
     dry-configurable (0.7.0)
       concurrent-ruby (~> 1.0)
@@ -168,9 +167,6 @@ GEM
       dry-equalizer (~> 0.2)
       dry-logic (~> 0.4, >= 0.4.0)
       dry-types (~> 0.13.1)
-    erubi (1.8.0)
-=======
-    docile (1.1.5)
     dry_crud_jsonapi (0.1.0)
       jsonapi-rails (~> 0.3.1)
       rails (~> 5.0)
@@ -178,20 +174,12 @@ GEM
       dry_crud_jsonapi (~> 0.1.0)
       rswag-ui (~> 2.0.5)
       swagger-blocks (~> 2.0.2)
-    erubi (1.6.1)
->>>>>>> Gemify dry_crud_jsonapi and dry_crud_jsonapi_swagger
+    erubi (1.8.0)
     execjs (2.7.0)
-<<<<<<< HEAD
     fabrication (2.20.1)
     faker (1.9.1)
       i18n (>= 0.7)
     ffi (1.10.0)
-=======
-    fabrication (2.16.1)
-    faker (1.8.4)
-      i18n (~> 0.5)
-    ffi (1.9.18)
->>>>>>> Initial implementation of jsonapi, refs #46483
     gems (0.8.3)
     gemsurance (0.9.0)
       bundler (~> 1.2)
@@ -221,11 +209,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-<<<<<<< HEAD
     json (2.1.0)
-    kaminari (1.1.1)
-=======
-    json (1.8.6)
     jsonapi-deserializable (0.2.0)
     jsonapi-parser (0.1.1)
     jsonapi-rails (0.3.1)
@@ -237,8 +221,7 @@ GEM
     jsonapi-renderer (0.2.0)
     jsonapi-serializable (0.3.0)
       jsonapi-renderer (~> 0.2.0)
-    kaminari (1.0.1)
->>>>>>> Initial implementation of jsonapi, refs #46483
+    kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
       kaminari-activerecord (= 1.1.1)
@@ -422,9 +405,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    swagger-blocks (2.0.2)
     tdigest (0.1.1)
       rbtree (~> 0.4.2)
-    swagger-blocks (2.0.2)
     temple (0.8.0)
     thor (0.20.3)
     thread_safe (0.3.6)
@@ -527,7 +510,6 @@ DEPENDENCIES
   selenium-webdriver
   simplecov-rcov!
   spring
-  swagger-blocks
   turbolinks
   uglifier
   validates_by_schema
