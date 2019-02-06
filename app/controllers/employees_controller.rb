@@ -7,6 +7,11 @@
 class EmployeesController < ManageController
   include Scopable
   include DryCrudJsonapi
+  include DryCrudJsonapiSwagger
+
+  swagger_param :scope,
+                type: 'string',
+                description: 'blabla'
 
   self.permitted_attrs += [:firstname, :lastname, :shortname, :email, :ldapname,
                           :department_id, :crm_key, :probation_period_end_date,

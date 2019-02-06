@@ -5,6 +5,14 @@ GIT
     simplecov-rcov (0.2.3.1)
       simplecov (>= 0.4.1)
 
+PATH
+  remote: ../../dry_crud_jsonapi_swagger
+  specs:
+    dry_crud_jsonapi_swagger (0.1.1)
+      dry_crud_jsonapi (~> 0.1.0)
+      rswag-ui (~> 2.0.5)
+      swagger-blocks (~> 2.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -170,10 +178,6 @@ GEM
     dry_crud_jsonapi (0.1.0)
       jsonapi-rails (~> 0.3.1)
       rails (~> 5.0)
-    dry_crud_jsonapi_swagger (0.1.1)
-      dry_crud_jsonapi (~> 0.1.0)
-      rswag-ui (~> 2.0.5)
-      swagger-blocks (~> 2.0.2)
     erubi (1.8.0)
     execjs (2.7.0)
     fabrication (2.20.1)
@@ -466,7 +470,7 @@ DEPENDENCIES
   delayed_cron_job
   delayed_job_active_record
   dry_crud_jsonapi
-  dry_crud_jsonapi_swagger
+  dry_crud_jsonapi_swagger!
   fabrication
   faker
   gemsurance
