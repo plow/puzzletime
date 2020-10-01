@@ -3,11 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class WorkloadTest < ActiveSupport::TestCase
-
   test 'has correct summary entries' do
     assert_equal ['Puzzle', departments(:devtwo)], report.summary.map(&:label)
   end
@@ -380,7 +378,7 @@ class WorkloadTest < ActiveSupport::TestCase
   end
 
   def create_employments
-    Employment.create!(employee: employees(:pascal), start_date: Date.parse('1.1.2006'), percent: 80)
-    Employment.create!(employee: employees(:lucien), start_date: Date.parse('1.1.2006'), percent: 100)
+    Fabricate(:employment, employee: employees(:pascal), start_date: Date.parse('1.1.2006'), percent: 80)
+    Fabricate(:employment, employee: employees(:lucien), start_date: Date.parse('1.1.2006'), percent: 100)
   end
 end

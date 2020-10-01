@@ -3,14 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class EmployeeStatistics
   attr_reader :employee
 
   def initialize(employee)
     @employee = employee
   end
-
 
   #########  vacation information ############
 
@@ -57,7 +55,6 @@ class EmployeeStatistics
     worktimes.sum(:hours).to_f
   end
 
-
   ###########  overtime information  ###################
 
   # Returns the overall overtime hours until the given date.
@@ -85,6 +82,14 @@ class EmployeeStatistics
     Employment.normalize_boundaries(employments, period)
   end
 
+  ######### worktime information ####################
+
+  def pending_worktime(period)
+    musttime(period) -
+      payed_worktime(period) -
+      compensated_overtime(period)
+  end
+
   private
 
   # Returns the hours this employee worked plus the payed absences for the given period.
@@ -95,6 +100,16 @@ class EmployeeStatistics
       where('((work_item_id IS NOT NULL AND absence_id IS NULL) OR absences.payed)').
       sum(:hours).
       to_f
+  end
+
+  # Returns the hours this employee compensated overtime.
+  def compensated_overtime(period)
+    @employee.worktimes
+      .joins('LEFT JOIN absences ON absences.id = absence_id')
+      .in_period(period)
+      .where('(absences.compensation) AND NOT (absences.payed)')
+      .sum(:hours)
+      .to_f
   end
 
   # Return the overtime days that were transformed into vacations up to the given date.
@@ -115,16 +130,14 @@ class EmployeeStatistics
       to_f
   end
 
-
   ######### employment helpers ######################
-
 
   # Returns the Period from the first employement date until the given period.
   # Returns nil if no employments exist until this date.
   def employment_period_to(date)
     first_employment = @employee.employments.reorder('start_date ASC').first
     return nil if first_employment.nil? || first_employment.start_date > date
+
     Period.new(first_employment.start_date, date)
   end
-
 end

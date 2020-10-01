@@ -3,9 +3,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 module EmployeeMasterDataHelper
   def format_year_of_service(employment_date)
-    ((Date.current - employment_date) / 365).floor
+    ((Time.zone.now - employment_date.to_time) / 1.year.seconds).floor
+  end
+
+  def format_nationalities(employee)
+    return unless employee.nationalities.present?
+
+    employee.nationalities.map do |country_code|
+      country = ISO3166::Country[country_code]
+      country.translations[I18n.locale.to_s] || country.name
+    end.join(', ')
   end
 end

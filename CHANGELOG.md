@@ -1,8 +1,73 @@
+# 2.6
+
+### Features
+* **Verpflegungsentschädigung:** Bei der Arbeitszeiterfassung kann zusätzlich angegeben werden, ob die Arbeit beim Kunden vor Ort erfolgte und dazu eine Verpflegungsentschädigung gewünscht wird.
+* **Mitarbeiter-Stammdaten:** Ausweisinformationen können nun hinzugefügt werden.
+* **Buchungspositionen:** Einstellungen zu Ticket, Von-Bis-Zeiten und Bemerkungen können nicht mehr geändert werden, falls bereits Leistungen ohne diese Angaben erfasst wurden.
+* **Buchungspositionen:** Auftrags-Cockpit mit neuen Informationen ergänzt.
+
+### Improvements
+* **Usability:** Unter "Members" - "Zeiten" wird die Tabelle standardmässig nach Members der eigenen Organisationseinheit gefiltert, was die Bedienung und Ladegeschwindigkeit massiv erhöht.
+* **Usability:** Im Zeiterfassungs-Formular können nun auch alte Zeiteinträge dupliziert werden.
+* **Usability:** Auftragsverantwortliche dürfen die AHV-Nummern aller Members einsehen.
+* **WebServer:** Mehr Threads für mehr Leistung.
+* **Sicherheit:** Updates diverser rubygems aus Sicherheitsgründen.
+
+### Bug fixes
+* **Stundenübersicht:** Falsches Total berichtigt.
+* **Buchungspositionen:** Automatische Budget-Berechnung beim Eintragen korrigiert.
+* **Mitarbeiterliste:** Falsche Berechnung des Jubiläum (Dienstjahre) [\#61](https://github.com/puzzle/puzzletime/issues/61)
+
+
+# 2.5
+
+### Improvements
+* **Layout:** Die Navigationsleiste ist nun sticky [\#29](https://github.com/puzzle/puzzletime/issues/29)
+* **Wording:** Mitarbeiter heissen neu Members.
+* **Absenzen:** Mit Management-Berechtigung können nun Absenzen der anderen Members gelöscht werden.
+* **Zeitfreigabe:** Die Zeitfreigabe wird neu im Log des Members angezeigt.
+* **Rechnungen:** Manuelle Rechnung, die im Rechnungsstellungtool editiert wurden, können in PuzzleTime nicht mehr versehentlich überschrieben werden.
+* **Mitarbeiterblatt:** Die AHV-Nummer der Members wird nur noch mit Management-Berechtigung angezeigt [\#23](https://github.com/puzzle/puzzletime/issues/23)
+
+* **Umsatzberechnung:** Fälschlicherweise verrechenbar gebuchte Stunden auf Puzzle werden nun nicht mehr mit einbezogen.
+* **Umsatz:** Gibt es jetzt als CSV Export.
+* **Feiertage:** Neu können alle Feiertage frei konfiguriert werden.
+* **Sicherheit:** Updates diverser rubygems aus Sicherheitsgründen.
+
+### Bug fixes
+* **Login:** Bei fehlerhaftem Login wird die Meldung nun in der Warnfarbe dargestellt.
+* **Wochenübersicht Stunden:** Sollstundenlinie verschiebt sich nicht mehr.
+* **Zeitbuchung:** Es kann nun nur noch von 00:00-23:59 gebucht werden um Fehlern vorzubeugen.
+* **Budget-Controlling:** Submenü wird nun wieder korrekt dargestellt.
+* **Browsersupport:** Projektsuche funktioniert wieder auf IE11.
+
+
+# 2.4
+
+### Features
+* **Spesen:** Neu können in PuzzleTime Spesen hochgeladen und freigegeben resp. abgelehnt werden.
+* **API:** Ein neues json:api mit Lesezugriff, vorerst nur für /employees. Unter `/api/docs` ist ein Swagger UI mit der Dokumentation verfügbar.
+
+### Improvements
+* **Umsatz:** Auftragsverantwortliche haben nun auch Zugriff auf den Umsatz.
+
+### Bug Fixes
+* **Zeiterfassung:** Usability Fehler beim Duplizieren von Zeiteinträgen geflickt [\#28](https://github.com/puzzle/puzzletime/issues/28)
+* **Zeiterfassung:** Beim Zeiterfassen mit Firefox kann mit Tab wieder von der Buchungsposition weitergesprungen werden [\#34](https://github.com/puzzle/puzzletime/issues/34)
+
+
 # 2.3
 
 ### Improvements
-
 * **Ruby/Rails:** Auf Ruby 2.5.3 und Rails 5.2.2 aktualisiert
+* **Mitarbeiter-Stammdaten:** Neu können bei den Mitarbeitern Nationalitäten und der (Hochschul-)Abschluss erfasst werden.
+* **Rechnungen:** Unter Aufträge - In einem einzelnen Auftrag - Rechnungen wurden die Summen verbessert um einen besseren Überblick über bezahlte und offene Stunden zu erhalten.
+* **Mitarbeiterlog I:** Unter Verwalten - Mitarbeiter - Log können berechtigte Personen nun nebst den Änderungen am Mitarbeiter auch die Änderungen an den Anstellungen nachverfolgen.
+* **Mitarbeiterlog II:** Sofern möglich werden Namen statt IDs der Änderungen angezeigt.
+* **Konfigurierbarkeit:** ID der betreibenden Firma, MwST, Währung und Land können nun konfiguriert werden.
+
+### Bug Fixes
+* **Wirtschaftlichkeit:** Unter Aufträge - In einem einzelnen Auftrag - Positionen werden in der Berechnung der Wirtschaftlichkeit die stornierten Rechnungen nicht mehr mit einberechnet.
 
 # 2.2
 

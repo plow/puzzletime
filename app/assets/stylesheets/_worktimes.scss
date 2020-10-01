@@ -286,6 +286,7 @@ $worktimes-weekcontent-hover-bg: $gray-lighter;
         bottom: 0;
         left: 0;
         z-index: 0;
+        width: 77%;
       }
 
       .billable-icon {
@@ -293,6 +294,15 @@ $worktimes-weekcontent-hover-bg: $gray-lighter;
         display: block;
         position: absolute;
         left: -35px;
+        padding-left: $grid-gutter-width / 2;
+        font-size: 22px;
+      }
+
+      .meal-compensation-icon {
+        @extend .col-xs-offset-1;
+        display: block;
+        position: absolute;
+        left: -70px;
         padding-left: $grid-gutter-width / 2;
         font-size: 22px;
       }
@@ -385,6 +395,10 @@ $worktimes-weekcontent-hover-bg: $gray-lighter;
   top: -6px;
   z-index: 2;
   padding: $padding-base-vertical 0;
+
+  @media (min-width: 768px) {
+    top: 134px;
+  }
 
   &.stuck {
     position: fixed;

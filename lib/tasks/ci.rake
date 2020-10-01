@@ -4,7 +4,6 @@
 #  https://github.com/puzzle/puzzletime.
 GECKO_DOWNLOAD_URL = 'https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz'.freeze
 
-
 desc 'Runs the tasks for a commit build'
 task ci: ['log:clear',
           'db:migrate',
@@ -15,11 +14,12 @@ namespace :ci do
   desc 'Runs the tasks for a nightly build, set TEST_REPORTS=true'
   task nightly: ['log:clear',
                  'db:migrate',
+                 'ci:prepare',
                  'test',
                  'erd',
                  'rubocop:report',
                  'brakeman',
-                 'gemsurance']
+                 'bundle:audit']
 
   desc 'Prepare the system for integration tests'
   task prepare: ['vendor/tools/geckodriver/geckodriver'] do |target|
@@ -42,7 +42,6 @@ namespace :ci do
     end
     puts 'Geckodriver prepared'
   end
-
 end
 
 private
@@ -66,4 +65,3 @@ end
 def modify_path(target)
   ENV['PATH'] = "#{target.dirname}:#{ENV['PATH']}"
 end
-

@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: employments
@@ -18,6 +17,10 @@
 #
 
 Fabricator(:employment) do
+  employee
   percent    { 80 }
   start_date { 1.year.ago }
+  employment_roles_employments(count: 1) do |attrs|
+    Fabricate.build(:employment_roles_employment, percent: attrs[:percent])
+  end
 end

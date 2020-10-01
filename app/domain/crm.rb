@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 module Crm
   # Access the active CRM class here
   cattr_accessor :instance
@@ -11,7 +10,7 @@ module Crm
   def self.init
     if Settings.highrise.api_token
       Crm.instance = Crm::Highrise.new
-      CrmSyncJob.new.schedule if Delayed::Job.table_exists?
+      CrmSyncJob.schedule if Delayed::Job.table_exists?
     end
   end
 end

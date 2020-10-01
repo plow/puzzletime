@@ -3,11 +3,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: 'worktimes#index'
+
+  # mount DryCrudJsonapiSwagger::Engine => '/apidocs'
+
+  namespace :api do
+    defaults format: :jsonapi do
+      namespace :v1 do
+        resources :employees, only: [:index, :show]
+      end
+    end
+
+    mount Rswag::Ui::Engine => 'docs'
+    get '/docs/:api_version', to: 'apidocs#show', constraints: { api_version: /v\d+/ }
+  end
 
   resources :absences, except: [:show]
 
@@ -37,11 +49,15 @@ Rails.application.routes.draw do
       get :log, to: 'employees/log#index'
     end
 
+    resources :expenses
     resources :employments, except: [:show]
     resources :overtime_vacations, except: [:show]
     resource :worktimes_commit, only: [:edit, :update], controller: 'employees/worktimes_commit'
     resource :worktimes_review, only: [:edit, :update], controller: 'employees/worktimes_review'
   end
+
+  resources :expenses
+  resources :expenses_reviews, only: [:show, :create, :update, :index]
 
   resources :employment_roles, except: [:show]
   resources :employment_role_levels, except: [:show]
@@ -182,6 +198,12 @@ Rails.application.routes.draw do
     resource :company, only: :show
   end
 
+  resources :meal_compensations, only: [:index, :show] do
+    member do
+      get :details
+    end
+  end
+
   get :vacations, to: 'vacations#show'
   get 'weekly_graph/:employee_id', to: 'weekly_graph#show', as: :weekly_graph
 
@@ -190,7 +212,7 @@ Rails.application.routes.draw do
     get :workload, to: 'workload_report#index', as: :reports_workload
     get :revenue, to: 'revenue_reports#index', as: :reports_revenue
     get :capacity, to: 'capacity_report#index', as: :reports_capacity
-    get :role_distribution, to: 'role_distribution_report#index', as: :reports_role_distribution
+    get :export, to: 'export_report#index', as: :reports_export
   end
 
   scope '/login', controller: 'login' do
@@ -201,10 +223,9 @@ Rails.application.routes.draw do
   get 'status/health', to: 'status#health'
   get 'status/readiness', to: 'status#readiness'
 
-  get '/404', to: 'errors#404'
-  get '/500', to: 'errors#500'
-  get '/503', to: 'errors#503'
+  match '/404', to: 'errors#not_found', via: :all
+  match '/500', to: 'errors#internal_server_error', via: :all
+  match '/503', to: 'errors#service_unavailable', via: :all
 
   get 'design_guide', to: 'design_guide#index'
-
 end

@@ -41,5 +41,17 @@ C:\\*
 # Postgres files for dockerized development
 postgres_files
 
+# ActiveStorage disk backend
+/storage
+
 .pry_history
 tags
+
+# Symlinked rails engines for development
+/engines/*
+
+# ActiveStorage folder
+/storage
+
+# bundler tools dir
+/vendor/tools

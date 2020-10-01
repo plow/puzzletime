@@ -1,14 +1,14 @@
+# -*- coding: utf-8 -*-
 #  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
 #  PuzzleTime and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # coding: utf-8
+
 require 'test_helper'
 
 class RoleDistributionReportTest < ActiveSupport::TestCase
-
   test '#filename' do
     assert_equal 'puzzletime_funktionsanteile_20100123.csv', report.filename
   end
@@ -18,7 +18,7 @@ class RoleDistributionReportTest < ActiveSupport::TestCase
 
     title, header, *lines = CSV.parse(report.to_csv)
     assert_equal 'Funktionsanteile per 23.01.2010, GJ 2009/2010', title.first
-    assert_equal ['Mitarbeiter', 'Anstellung', 'Wertschöpfung', 'Technical Board', 'Unterstützend'], header
+    assert_equal ['Member', 'Anstellung', 'Wertschöpfung', 'Technical Board', 'Unterstützend'], header
 
     lines = lines.select { |l| l.any?(&:present?) } # remove empty lines
 
@@ -42,6 +42,7 @@ class RoleDistributionReportTest < ActiveSupport::TestCase
   def setup_employments
     pedro = employees(:various_pedro)
     pedro.update!(department: departments(:devone)) # 100%
+    pedro.employments.last.employment_roles_employments.delete_all
     pedro.employments.last.employment_roles_employments.create!(
       employment_role_id: employment_roles(:software_engineer).id,
       employment_role_level_id: employment_role_levels(:senior).id,
@@ -59,6 +60,7 @@ class RoleDistributionReportTest < ActiveSupport::TestCase
 
     pablo = employees(:next_year_pablo)
     pablo.update!(department: departments(:devone)) # 100%
+    pablo.employments.last.employment_roles_employments.delete_all
     pablo.employments.last.employment_roles_employments.create!(
       employment_role_id: employment_roles(:software_developer).id,
       employment_role_level_id: employment_role_levels(:professional).id,
@@ -76,11 +78,11 @@ class RoleDistributionReportTest < ActiveSupport::TestCase
 
     john = employees(:long_time_john)
     john.update!(department: departments(:devtwo)) # 90%
+    john.employments.last.employment_roles_employments.delete_all
     john.employments.last.employment_roles_employments.create!(
       employment_role_id: employment_roles(:ux_consultant).id,
       employment_role_level_id: employment_role_levels(:professional).id,
       percent: 90
     )
   end
-
 end

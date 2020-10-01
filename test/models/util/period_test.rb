@@ -3,16 +3,37 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class PeriodTest < ActiveSupport::TestCase
   def setup
+    setup_regular_holidays([2005, 2006])
     @half_year = Period.new(Date.new(2006, 1, 1), Date.new(2006, 6, 30))
     @one_month = Period.new(Date.new(2006, 3, 1), Date.new(2006, 3, 31))
     @two_month = Period.new(Date.new(2005, 12, 1), Date.new(2006, 1, 31))
     @one_day = Period.new(Date.new(2006, 1, 3), Date.new(2006, 1, 3))
     @holy_day = Period.new(Date.new(2006, 1, 1), Date.new(2006, 1, 1))
+  end
+
+  def test_vacation_days_per_year_factors
+    assert_equal 1.0, Period.new(Date.new(2000, 1, 1), Date.new(2000, 12, 31)).vacation_factor_sum
+    assert_equal 1.0, Period.new(Date.new(2001, 1, 1), Date.new(2001, 12, 31)).vacation_factor_sum
+    assert_equal 2.0, Period.new(Date.new(2000, 1, 1), Date.new(2001, 12, 31)).vacation_factor_sum
+    assert_equal 4.0, Period.new(Date.new(2001, 1, 1), Date.new(2004, 12, 31)).vacation_factor_sum
+    assert_equal 5.0, Period.new(Date.new(2000, 1, 1), Date.new(2004, 12, 31)).vacation_factor_sum
+
+    assert_in_delta 0.497, Period.new(Date.new(2000, 1, 1), Date.new(2000, 6, 30)).vacation_factor_sum
+    assert_in_delta 0.495, Period.new(Date.new(2001, 1, 1), Date.new(2001, 6, 30)).vacation_factor_sum
+
+    assert_in_delta 1.495, Period.new(Date.new(2000, 1, 1), Date.new(2001, 6, 30)).vacation_factor_sum
+    assert_in_delta 1.495, Period.new(Date.new(2001, 1, 1), Date.new(2002, 6, 30)).vacation_factor_sum
+    assert_in_delta 0.005, Period.new(Date.new(2000, 12, 1), Date.new(2000, 12, 2)).vacation_factor_sum
+
+    assert_equal 6.0, Period.new(Date.new(2000, 1, 1), Date.new(2005, 12, 31)).vacation_factor_sum
+    assert_equal 4.0, Period.new(Date.new(2000, 1, 1), Date.new(2003, 12, 31)).vacation_factor_sum
+
+    assert_equal 0, Period.new(Date.new(2004, 1, 1), Date.new(2003, 12, 31)).vacation_factor_sum
+    assert_equal 0, Period.new(Date.new(2004, 12, 31), Date.new(2004, 12, 1)).vacation_factor_sum
   end
 
   def test_parse
@@ -232,7 +253,7 @@ class PeriodTest < ActiveSupport::TestCase
     assert_equal count, 1
     count = 0
     two_months_middle = Period.new(Date.new(2005, 12, 15), Date.new(2006, 1, 15))
-    two_months_middle.step_months { |_d| count += 1}
+    two_months_middle.step_months { |_d| count += 1 }
     assert_equal count, 2
   end
 

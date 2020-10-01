@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class ReportType
   include Comparable
 
@@ -21,6 +20,7 @@ class ReportType
 
   def <=>(other)
     return unless other.is_a?(ReportType)
+
     accuracy <=> other.accuracy
   end
 
@@ -98,6 +98,9 @@ class StartStopType < ReportType
        worktime.to_end_time <= worktime.from_start_time
       worktime.errors.add(:to_end_time, 'Die Endzeit muss nach der Startzeit sein')
     end
+    if worktime.from_start_time&.to_date != worktime.to_end_time&.to_date
+      worktime.errors.add(:to_end_time, 'Die Endzeit muss zwischen 00:00-23:59 liegen')
+    end
   end
 end
 
@@ -159,7 +162,6 @@ class HoursMonthType < ReportType
     I18n.l(date, format: '%m.%Y')
   end
 end
-
 
 class ReportType
   INSTANCES = [StartStopType::INSTANCE,

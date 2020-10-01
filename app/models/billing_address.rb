@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: billing_addresses
@@ -17,11 +16,9 @@
 #  town          :string
 #  country       :string(2)
 #  invoicing_key :string
-#  client_name   :string
 #
 
 class BillingAddress < ActiveRecord::Base
-
   protect_if :invoices,
              'Dieser Eintrag kann nicht gelöscht werden, da ihm noch Rechnungen zugeordnet sind'
 

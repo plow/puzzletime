@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class OrdersController < CrudController
   include Filterable
 
@@ -14,7 +13,6 @@ class OrdersController < CrudController
     order_contacts_attributes: [:id, :contact_id_or_crm, :comment, :_destroy],
     additional_crm_orders_attributes: [:id, :crm_key, :_destroy]
   ]
-
 
   self.remember_params += %w(department_id kind_id status_id responsible_id)
 
@@ -37,7 +35,6 @@ class OrdersController < CrudController
   after_create :copy_associations
 
   before_render_form :set_option_values
-
 
   ### ACTIONS
 
@@ -80,13 +77,17 @@ class OrdersController < CrudController
   def search
     params[:q] ||= params[:term]
     respond_to do |format|
-      format.json do
-        @orders = Order.list.where(search_conditions).minimal.limit(20)
-      end
+      format.json { @orders = search_entries }
     end
   end
 
   private
+
+  def search_entries
+    orders = Order.list.where(search_conditions)
+    orders = orders.open if params[:only_open]
+    orders.minimal.limit(20)
+  end
 
   def list_entries
     entries = super.includes(:kind, :department, :status, :responsible,
@@ -145,7 +146,7 @@ class OrdersController < CrudController
     if entry.new_record?
       entry.work_item.parent_id ||= (params[:category_active] &&
                                    params[:category_work_item_id].presence) ||
-                                  params[:client_work_item_id].presence
+                                    params[:client_work_item_id].presence
     end
   end
 
@@ -229,5 +230,4 @@ class OrdersController < CrudController
   def search_support?
     false
   end
-
 end

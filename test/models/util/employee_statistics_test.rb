@@ -3,11 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class EmployeeStatisticsTest < ActiveSupport::TestCase
-
   setup :create_employments
 
   test '#employments_during with start and end date set' do
@@ -34,21 +32,72 @@ class EmployeeStatisticsTest < ActiveSupport::TestCase
     assert_equal 10, employments.second.percent
   end
 
+  test 'overtime works' do
+    e = employees(:pascal)
+    period = Period.new('01.12.2006', '11.12.2006')
+
+    assert_difference('e.statistics.overtime(period).to_f', 1) do
+      create_worktime
+    end
+  end
+
+  test 'remaining worktime is affected by' do
+    period = Period.new('01.12.2006', '11.12.2006')
+    method = 'statistics.pending_worktime(period).to_f'
+
+    # Working decreases the hours
+    assert_difference(method, -1) { create_worktime }
+    # Compensations decrease the hours
+    assert_difference(method, -1) { create_absence }
+    # Vacations decrease the hours
+    assert_difference(method, -1) { create_absence(absence_id: 1) }
+    # Vacation and Compensation only decreases by 1 not 2
+    assert_difference(method, -1) { create_absence(absence_id: 5) }
+    # Going to the doctor does not affect the remaining hours
+    assert_difference(method,  0) { create_absence(absence_id: 3) }
+  end
+
   private
 
   def create_employments
     employee.employments.create!(start_date: Date.new(2000, 1, 2),
                                  end_date: Date.new(2000, 1, 4),
-                                 percent: 10)
+                                 percent: 10,
+                                 employment_roles_employments: [Fabricate.build(:employment_roles_employment)])
     employee.employments.create!(start_date: Date.new(2000, 2, 1),
                                  end_date: Date.new(2000, 2, 4),
-                                 percent: 20)
+                                 percent: 20,
+                                 employment_roles_employments: [Fabricate.build(:employment_roles_employment)])
     employee.employments.create!(start_date: Date.new(1999, 12, 1),
                                  end_date: Date.new(1999, 12, 4),
-                                 percent: 30)
+                                 percent: 30,
+                                 employment_roles_employments: [Fabricate.build(:employment_roles_employment)])
     employee.employments.create!(start_date: Date.new(2000, 3, 1),
                                  end_date: nil,
-                                 percent: 40)
+                                 percent: 40,
+                                 employment_roles_employments: [Fabricate.build(:employment_roles_employment)])
+  end
+
+  def create_worktime(**kwargs)
+    args = {
+      work_item_id: accounting_posts(:hitobito_demo_app).work_item_id,
+      employee_id: employees(:pascal).id,
+      work_date: Time.new(2006,12,01,12),
+      hours: 1,
+      report_type: 'absolute_day'
+    }.merge(kwargs)
+    Worktime.create!(args)
+  end
+
+  def create_absence(**kwargs)
+    args = {
+      absence_id: absences(:compensation).id,
+      employee_id: employees(:pascal).id,
+      work_date: Time.new(2006,12,01,12),
+      hours: 1,
+      report_type: 'absolute_day'
+  }.merge(kwargs)
+    Absencetime.create!(args)
   end
 
   def employee
@@ -58,5 +107,4 @@ class EmployeeStatisticsTest < ActiveSupport::TestCase
   def statistics
     @statistics ||= employee.statistics
   end
-
 end

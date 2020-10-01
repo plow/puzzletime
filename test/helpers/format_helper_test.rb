@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 # Test FormatHelper
@@ -47,7 +46,7 @@ class FormatHelperTest < ActionView::TestCase
   end
 
   test 'format days' do
-    assert_equal '5.0 Tage', format_days(5.0001)
+    assert_equal '5.00 Tage', format_days(5.0001)
     assert_equal '-1.23 Tage', format_days(-1.23)
   end
 
@@ -157,7 +156,7 @@ class FormatHelperTest < ActionView::TestCase
 
   test 'format time column' do
     m = crud_test_models(:AAAAA)
-    assert_equal '00:01', format_type(m, :gets_up_at)
+    assert_equal '01:01', format_type(m, :gets_up_at)
   end
 
   test 'format text column' do

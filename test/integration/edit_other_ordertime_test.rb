@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class EditOtherOrdertimeTest < ActionDispatch::IntegrationTest
@@ -85,7 +84,7 @@ class EditOtherOrdertimeTest < ActionDispatch::IntegrationTest
   end
 
   def login
-    post '/login/login', params: { user: 'GGG', pwd: 'Yaataw' }
+    post '/login/login', params: { user: 'GGG', pwd: 'ptime' }
     follow_redirect!
     assert_response :success
     assert_equal '/', path

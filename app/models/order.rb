@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: orders
@@ -27,7 +26,6 @@
 #
 
 class Order < ActiveRecord::Base
-
   include BelongingToWorkItem
   include Closable
   include Evaluatable
@@ -83,6 +81,8 @@ class Order < ActiveRecord::Base
     select('orders.id, work_items.name, work_items.path_names, work_items.path_shortnames')
   }
 
+  scope :open, -> { where(status: OrderStatus.open) }
+
   class << self
     def order_by_target_scope(target_scope_id, desc = false)
       joins('LEFT JOIN order_targets sort_target ' \
@@ -133,6 +133,10 @@ class Order < ActiveRecord::Base
     OrderUncertainty.risk(major_chance_value)
   end
 
+  def label_with_workitem_path
+    "#{work_item.path_shortnames}: #{name}"
+  end
+
   private
 
   def work_item_parent_presence
@@ -143,6 +147,7 @@ class Order < ActiveRecord::Base
 
   def set_self_in_nested
     return unless OrderTeamMember.table_exists? # required until all instances are migrated
+
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     [order_team_members, order_contacts].each do |c|
       c.each do |e|

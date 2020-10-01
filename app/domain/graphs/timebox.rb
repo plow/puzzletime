@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class Timebox
   PIXEL_PER_HOUR = 8.0
 
@@ -25,7 +24,9 @@ class Timebox
     end
 
     def height_from_hours(hours)
-      hours * PIXEL_PER_HOUR
+      # Round to fix pixel display issues
+      rounded = (hours * 4).round / 4.0
+      rounded * PIXEL_PER_HOUR
     end
 
     def format_hour(hour)

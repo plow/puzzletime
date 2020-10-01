@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: worktimes
@@ -27,7 +26,6 @@
 require 'test_helper'
 
 class OrdertimeTest < ActiveSupport::TestCase
-
   test 'closed worktimes may not change anymore' do
     t = Ordertime.create!(employee: employees(:pascal),
                           work_date: '2015-10-10',
@@ -63,6 +61,17 @@ class OrdertimeTest < ActiveSupport::TestCase
     assert_not_valid t, :base
   end
 
+  test 'worktime times must be 00:00-23:59' do
+    t = Ordertime.create(employee: employees(:pascal),
+      work_date:       '2015-10-10',
+      from_start_time: '00:00',
+      to_end_time:     '24:00',
+      work_item:       work_items(:webauftritt),
+      report_type:     'start_stop_day')
+
+    refute t.valid?, t.errors.details[:to_end_time].join(', ')
+  end
+
   test '#invoice_sent_or_paid?' do
     t = Ordertime.new
     assert !t.invoice_sent_or_paid?
@@ -76,5 +85,4 @@ class OrdertimeTest < ActiveSupport::TestCase
       assert_equal result, t.invoice_sent_or_paid?, "Status '#{status}', result should be #{result}"
     end
   end
-
 end

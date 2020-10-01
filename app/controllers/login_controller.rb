@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
+
 #  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
 #  PuzzleTime and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class LoginController < ApplicationController
   skip_before_action :authenticate, except: [:logout]
+  # it's safe to ignore CSRF token for login
+  skip_before_action :verify_authenticity_token, only: :login
   skip_authorization_check
 
   def index
@@ -18,7 +21,7 @@ class LoginController < ApplicationController
       if login_with(params[:user], params[:pwd])
         redirect_to params[:ref].presence || root_path
       else
-        flash[:notice] = 'Ungültige Benutzerdaten'
+        flash[:alert] = 'Ungültige Benutzerdaten'
       end
     end
   end

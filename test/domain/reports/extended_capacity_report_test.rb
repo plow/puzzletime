@@ -3,8 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # coding: utf-8
+
 require 'test_helper'
 
 class ExtendedCapacityReportTest < ActiveSupport::TestCase
@@ -81,7 +81,8 @@ class ExtendedCapacityReportTest < ActiveSupport::TestCase
   private
 
   def create_worktimes
-    employee.employments.create(start_date: period.start_date, percent: 100)
+    employee.employments.create!(start_date: period.start_date, percent: 100,
+                                employment_roles_employments: [Fabricate.build(:employment_roles_employment)])
 
     # billable project
     create_time(work_items(:webauftritt), 2, true)

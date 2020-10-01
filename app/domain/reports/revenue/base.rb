@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 module Reports::Revenue
   class Base
     class_attribute :grouping_model, :grouping_fk
@@ -31,7 +30,7 @@ module Reports::Revenue
 
     def hours_without_entry?
       ordertime_hours.any? { |(entry_id, _time), _sum_hours| entry_id.nil? } ||
-      planning_hours.any? { |(entry_id, _date), _sum_hours| entry_id.nil? }
+        planning_hours.any? { |(entry_id, _date), _sum_hours| entry_id.nil? }
     end
 
     def ordertime_hours
@@ -141,6 +140,7 @@ module Reports::Revenue
         .joins('LEFT JOIN orders ON orders.work_item_id = ANY (work_items.path_ids)')
         .in_period(period)
         .billable
+        .where.not('? = ANY (work_items.path_ids)', Settings.clients.company_id)
     end
 
     def load_plannings(period)
@@ -150,6 +150,7 @@ module Reports::Revenue
         .in_period(period)
         .definitive
         .where(accounting_posts: { billable: true })
+        .where.not('? = ANY (work_items.path_ids)', Settings.clients.company_id)
     end
 
     def load_ordertime_hours
@@ -190,6 +191,7 @@ module Reports::Revenue
     def load_planning_hours_each(*groupings)
       result = {}
       return result unless future_months?
+
       WorkingCondition.each_period_of(:must_hours_per_day, future_period) do |period, must_hours|
         sums = load_plannings(period)
                .group(groupings)
@@ -238,6 +240,5 @@ module Reports::Revenue
     def current_month
       @current_month ||= Time.zone.today.beginning_of_month
     end
-
   end
 end

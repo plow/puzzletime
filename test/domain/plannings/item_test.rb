@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class PlanningItemTest < ActiveSupport::TestCase
@@ -90,10 +89,10 @@ class PlanningItemTest < ActiveSupport::TestCase
   end
 
   test 'with unpaid vacation' do
-    e1 = Employment.create!(employee_id: employees(:pascal).id,
-                            percent: 0,
-                            start_date: '2000-01-03',
-                            end_date: '2000-02-03')
+    e1 = Fabricate(:employment, employee: employees(:pascal),
+                                percent: 0,
+                                start_date: '2000-01-03',
+                                end_date: '2000-02-03')
 
     i = Plannings::Item.new
     i.employment = e1
@@ -111,8 +110,8 @@ class PlanningItemTest < ActiveSupport::TestCase
     i = Plannings::Item.new
 
     expected = {
-        class: '-absence-unpaid',
-        title: 'Nicht angestellt'
+      class: '-absence-unpaid',
+      title: 'Nicht angestellt'
     }
 
     assert i.day_attrs == expected

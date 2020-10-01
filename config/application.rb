@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -36,6 +35,9 @@ module Puzzletime
                                 #{config.root}/app/domain
                                 #{config.root}/app/jobs)
 
+    # Use custom error controller
+    config.exceptions_app = self.routes
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -46,7 +48,13 @@ module Puzzletime
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = :'de-CH'
+    locale =
+      if ENV['RAILS_LOCALE']
+        :"#{ENV['RAILS_LOCALE']}"
+      else
+        :'de-CH'
+      end
+    config.i18n.default_locale = locale
 
     config.encoding = 'utf-8'
 
@@ -57,6 +65,8 @@ module Puzzletime
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
     config.active_record.time_zone_aware_types = [:datetime, :time]
+
+    config.active_job.queue_adapter = :delayed_job
 
     config.to_prepare do |_|
       Crm.init
@@ -69,20 +79,22 @@ module Puzzletime
   end
 
   def self.changelog_url
-    @@ptime_changelog_url ||= 'https://github.com/puzzle/puzzletime/blob/master/CHANGELOG.md'
+    # @@ptime_changelog_url ||= 'https://github.com/puzzle/puzzletime/blob/master/CHANGELOG.md'
+    @@ptime_changelog_url ||= "https://github.com/puzzle/puzzletime/blob/#{commit_hash || 'master'}/CHANGELOG.md"
   end
 
   private
+
   def self.build_version
-    major_and_minor = Puzzletime::VERSION
+    Puzzletime::VERSION
+  end
 
-    patch_and_build_info =
-      if File.exists?("#{Rails.root}/BUILD_INFO")
-        File.open("#{Rails.root}/BUILD_INFO").first.chomp
-      else
-        ''
-      end
+  def self.commit_hash(short: false)
+    if File.exists?("#{Rails.root}/BUILD_INFO")
+      commit = File.open("#{Rails.root}/BUILD_INFO").first.chomp
+      return commit.first(7) if short
 
-    "#{major_and_minor}#{patch_and_build_info}"
+      commit
+    end
   end
 end

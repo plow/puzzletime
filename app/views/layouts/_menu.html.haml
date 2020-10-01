@@ -16,6 +16,10 @@
             evaluation_path('userworkitems'),
             evaluation_path('userabsences')
 
+      = nav 'Spesen',
+        employee_expenses_path(current_user),
+        expenses_path
+
       = nav 'Aufträge',
             orders_path,
             orders_path,
@@ -37,7 +41,7 @@
             plannings_company_path,
             plannings_custom_lists_path
 
-      = nav 'Mitarbeiter',
+      = nav 'Members',
             employee_master_data_path,
             employee_master_data_path,
             evaluation_path('employees') + '$',
@@ -45,14 +49,16 @@
             evaluation_path('absences'),
             evaluation_path('employeeabsences'),
             reports_workload_path,
-            reports_role_distribution_path,
-            vacations_path
+            reports_export_path,
+            vacations_path,
+            Settings.meal_compensation.present? ? meal_compensations_path : nil
+
 
       - if can?(:manage, Client)
         = nav 'Verwalten',
               clients_path,
               clients_path,
-              employees_path,
+              employees_path + '$',
               departments_path,
               configurations_path,
               absences_path,

@@ -52,6 +52,12 @@ class LogPresenter
   def attribute_change(item_type, attr, changes)
     from, to = changes
     key = attribute_key(from, to)
+
+    if attr == 'committed_worktimes_at'
+      from = I18n.l(from, format: :month) if from
+      to   = I18n.l(to,   format: :month) if to
+    end
+
     I18n.t("version.attribute_change.#{key}", attribute_args(item_type, attr, from, to))
   end
 
@@ -111,5 +117,4 @@ class LogPresenter
   def resolve_association(association, id)
     association.classify.constantize.find_by(id: id) || id
   end
-
 end

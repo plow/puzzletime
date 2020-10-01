@@ -3,14 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class Period
   attr_reader :start_date, :end_date, :shortcut
 
   ####### constructors ########
 
   class << self
-
     def current_day
       day_for(Time.zone.today)
     end
@@ -111,6 +109,7 @@ class Period
       if [1, 2, 3, 4].exclude?(shift)
         raise ArgumentError, 'Unsupported shift for quarter shortcut'
       end
+
       quarter_for(Date.civil(year, shift * 3, 1), shortcut: shortcut)
     end
 
@@ -179,7 +178,6 @@ class Period
     def business_year_label(_date)
       'Geschäftsjahr/Ausblick'
     end
-
   end
 
   def initialize(start_date = Time.zone.today, end_date = Time.zone.today, label = nil,
@@ -190,11 +188,29 @@ class Period
     @shortcut = shortcut
   end
 
-
   #########  public methods  #########
+
+  def vacation_factor_sum
+    (start_date.year..end_date.year).sum do |year|
+      if start_date.year == year && end_date.year == year
+        vacation_factor(start_date..end_date)
+      elsif start_date.year == year
+        vacation_factor(start_date..start_date.end_of_year)
+      elsif end_date.year == year
+        vacation_factor(end_date.beginning_of_year..end_date)
+      else
+        1
+      end
+    end
+  end
+
+  def vacation_factor(range)
+    range.count.to_f / range.first.all_year.count
+  end
 
   def &(other)
     return self if self == other
+
     new_start_date = [start_date, other.start_date].compact.max
     new_end_date = [end_date, other.end_date].compact.min
     Period.new(new_start_date, new_end_date)
@@ -208,6 +224,7 @@ class Period
 
   def step_months
     return if unlimited?
+
     @start_date.beginning_of_month.step(@end_date.beginning_of_month) do |date|
       yield date if date.day == 1
     end
@@ -287,5 +304,4 @@ class Period
       ["#{column} <= ?", end_date]
     end
   end
-
 end

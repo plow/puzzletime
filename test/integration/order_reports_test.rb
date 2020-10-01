@@ -3,11 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class OrderReportsTest < ActionDispatch::IntegrationTest
-
   test 'live reloads when period filter change' do
     timeout_safe do
       list_orders
@@ -15,7 +13,7 @@ class OrderReportsTest < ActionDispatch::IntegrationTest
       assert_no_selector('table.orders-report tbody tr')
 
       fill_in('start_date', with: '1.11.2006')
-      fill_in('end_date', with: '') # required to lose focus on start_date
+      fill_in('end_date', with: ' ') # required to lose focus on start_date
       assert_selector('table.orders-report tbody tr', count: 4)
 
       fill_in('end_date', with: '1.12.2006')
@@ -57,5 +55,4 @@ class OrderReportsTest < ActionDispatch::IntegrationTest
     login_as :mark
     visit reports_orders_path
   end
-
 end

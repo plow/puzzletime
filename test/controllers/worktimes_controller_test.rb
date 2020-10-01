@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class WorktimesControllerTest < ActionController::TestCase
@@ -55,7 +54,8 @@ class WorktimesControllerTest < ActionController::TestCase
     assert_modify_buttons
   end
 
-  test 'no modify buttons for manager\s committed time period' do
+  # test 'no modify buttons for manager\s committed time period' do
+  test 'also show modify buttons for manager\s committed time period' do
     create_time_entries(:mark)
     login_as(:mark)
 
@@ -63,7 +63,7 @@ class WorktimesControllerTest < ActionController::TestCase
 
     get :index, params: { week_date: months_first_day.to_s }
     assert_select('a i.icon-duplicate', count: 2)
-    assert_select('a i.icon-delete', count: 1)
+    assert_select('a i.icon-delete', count: 2)
     assert_select('a i.icon-add', count: 0)
   end
 
@@ -147,6 +147,4 @@ class WorktimesControllerTest < ActionController::TestCase
   def months_first_day
     Date.today.at_beginning_of_month
   end
-
-
 end

@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 module WorktimeHelper
   def worktime_account(worktime)
     worktime.account.label_verbose if worktime.account
@@ -30,7 +29,7 @@ module WorktimeHelper
   def overview_day_class(_worktimes, day)
     if day == Time.zone.today
       'today'
-    elsif Holiday.holiday?(day)
+    elsif Holiday.non_working_day?(day)
       'holiday'
     elsif day < Time.zone.today && sum_hours(day) <= 0
       'missing'

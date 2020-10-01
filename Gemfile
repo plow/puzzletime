@@ -1,11 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.2'
+gem 'rails', '~> 5.2.x'
 
 gem 'pg', '= 0.21.0'
 
 gem 'acts_as_tree'
-gem 'airbrake'
 gem 'bleib', '0.0.8'
 gem 'bootsnap'
 gem 'cancancan'
@@ -15,14 +14,17 @@ gem 'daemons'
 gem 'dalli'
 gem 'delayed_cron_job'
 gem 'delayed_job_active_record'
+gem 'fast_jsonapi'
 gem 'haml'
 gem 'highrise'
+gem 'image_processing', '~> 1.2'
 gem 'jbuilder'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'nested_form_fields'
 gem 'net-ldap'
 gem 'nokogiri'
+gem 'prawn'
 gem 'prometheus_exporter'
 gem 'protective'
 gem 'puma'
@@ -30,9 +32,16 @@ gem 'rails-i18n'
 gem 'rails_autolink'
 gem 'request_store'
 gem 'rqrcode'
+gem 'rswag-ui'
 gem 'seed-fu'
+gem 'swagger-blocks'
 gem 'validates_by_schema'
 gem 'validates_timeliness'
+
+# Error reporting, they are required in their respective initializers
+gem 'airbrake', require: false
+gem 'sentry-raven', require: false
+
 # must be at the end
 gem 'paper_trail'
 
@@ -43,12 +52,12 @@ gem 'coffee-rails'
 # Using mini_racer instead of nodejs, because of errors on Jenkins.
 # mini_racer can only be built with gcc >= 4.7. Our Jenkins uses 4.4.7
 gem 'mini_racer'
-gem 'sass-rails'
+gem 'sass-rails', '~> 5'
 gem 'uglifier'
 
 # Locked to 3.3.x, because 3.4.0 expects sassc, which can only be built with gcc
 # >= 4.6. Our Jenkins uses 4.4.7
-gem 'bootstrap-sass', '~> 3.3.0'
+gem 'bootstrap-sass'
 gem 'chartjs-ror'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -56,6 +65,7 @@ gem 'selectize-rails'
 gem 'turbolinks'
 
 group :development, :test do
+  gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'faker'
@@ -70,15 +80,15 @@ group :development do
 end
 
 group :test do
+  gem 'bundler-audit'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'fabrication'
-  gem 'gemsurance'
   gem 'headless'
-  gem 'm'
   gem 'mocha', require: false
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
+  gem 'webdrivers'
 end
 
 group :console do
@@ -89,10 +99,14 @@ end
 group :metrics do
   gem 'annotate'
   gem 'brakeman'
+  gem 'haml-lint'
   gem 'minitest-reporters'
   gem 'rails-erd'
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter', require: false
+  gem 'rubocop-minitest'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
   gem 'sdoc'
   gem 'simplecov-rcov', git: 'https://github.com/puzzle/simplecov-rcov'
 end

@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
+
 #  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
 #  PuzzleTime and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class EmployeesEval < Evaluation
   self.division_column = 'employee_id'
   self.sub_evaluation   = 'employeeworkitems'
-  self.label            = 'Mitarbeiter Zeit'
+  self.label            = 'Member Zeit'
   self.total_details    = false
 
   def initialize(department_id = 0)
@@ -31,6 +32,16 @@ class EmployeesEval < Evaluation
 
   def employee_id
     division.id if division
+  end
+
+  def sum_total_times(period = nil)
+    query = if @department_id != 0
+              Department.find(@department_id).employee_worktimes
+            else
+              Worktime.all
+            end
+    query = query.where(type: worktime_type).in_period(period)
+    query_time_sums(query)
   end
 
   def division_supplement(_user)

@@ -1,13 +1,13 @@
+# -*- coding: utf-8 -*-
+
 #  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
 #  PuzzleTime and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class RevenueReportsControllerTest < ActionController::TestCase
-
   setup do
     login
     travel_to Date.new(2000, 9, 5)
@@ -15,6 +15,16 @@ class RevenueReportsControllerTest < ActionController::TestCase
 
   teardown do
     travel_back
+  end
+
+  test 'only management and order responsible employees have access' do
+    management        = Ability.new(employees(:mark))
+    order_responsible = Ability.new(employees(:lucien))
+    normal_user       = Ability.new(employees(:pascal))
+
+    assert management.can?(:revenue_reports, Department)
+    assert order_responsible.can?(:revenue_reports, Department)
+    assert normal_user.cannot?(:revenue_reports, Department)
   end
 
   test 'sets default period' do
@@ -59,6 +69,26 @@ class RevenueReportsControllerTest < ActionController::TestCase
                     'November 2001', 'Dezember 2001'
   end
 
+  test 'GET index csv exports csv file with grouping: Department' do
+    get :index, params: { grouping: 'Department' }, format: :csv
+    csv_match 'Organisationseinheit', response.body
+  end
+
+  test 'GET index csv exports csv file with grouping: PortfolioItem' do
+    get :index, params: { grouping: 'PortfolioItem' }, format: :csv
+    csv_match 'Portfolioposition', response.body
+  end
+
+  test 'GET index csv exports csv file with grouping: Service' do
+    get :index, params: { grouping: 'Service' }, format: :csv
+    csv_match 'Dienstleistung', response.body
+  end
+
+  test 'GET index csv exports csv file with grouping: Sector' do
+    get :index, params: { grouping: 'Sector' }, format: :csv
+    csv_match 'Branche', response.body
+  end
+
   private
 
   def assert_headings(*expected)
@@ -69,4 +99,12 @@ class RevenueReportsControllerTest < ActionController::TestCase
     assert_select('.revenue-report thead th').map { |e| e.text.strip }
   end
 
+  def csv_match(grouping, body)
+    assert_match(/#{grouping}/,                              body) # grouping
+    assert_match(/Juli 2000,August 2000/,                    body) # past months
+    assert_match(/Total,⌀/,                                  body) # past months summary
+    assert_match(/September 2000/,                           body) # current month
+    assert_match(/Oktober 2000,November 2000,Dezember 2000/, body) # future months
+    assert_match(/Total,0,0,0,0,0,0,0,0/,                    body) # summary footer
+  end
 end

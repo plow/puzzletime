@@ -35,8 +35,8 @@ de-CH:
         one: Liste
         other: Listen
       employee:
-        one: Mitarbeiter
-        other: Mitarbeiter
+        one: Member
+        other: Members
       employment:
         one: Anstellung
         other: Anstellungen
@@ -49,6 +49,9 @@ de-CH:
       employment_role_category:
         one: Funktionskategorie
         other: Funktionskategorien
+      expense:
+        one: Spesen
+        other: Spesen
       holiday:
         one: Feiertag
         other: Feiertage
@@ -119,6 +122,7 @@ de-CH:
         payed: Bezahlt
         private: Nicht öffentlich
         vacation: Ferien
+        compensation: Kompensation
       absencetime:
         duration: Dauer
       accounting_post:
@@ -131,6 +135,7 @@ de-CH:
         remaining_hours: Restaufwand
         report_type: Report Typ
         billable: Verrechenbar
+        meal_compensation: Verpflegungsentschädigung
         description_required: Beschreibung erforderlich
         ticket_required: Ticket erforderlich
         closed: Geschlossen
@@ -186,6 +191,7 @@ de-CH:
         committed_worktimes_at: Letzte freigegebene Periode
         reviewed_worktimes_at: Letzte kontrollierte Periode
         probation_period_end_date: Ende Probezeit
+        graduation: Abschluss
         phone_office: Telefon Büro
         phone_private: Telefon Privat
         street: Strasse
@@ -196,8 +202,11 @@ de-CH:
         emergency_contact_phone: Notfallnummer
         marital_status: Zivilstand
         social_insurance: AHV-Nummer
+        nationalities: Nationalitäten
         additional_information: Zusätzliche Informationen
         crm_key: Highrise ID
+        identity_card_type: Ausweistyp
+        identity_card_valid_until: Ausweis gültig bis
       employee/marital_statuses:
         married: Verheiratet
         single: Ledig
@@ -205,7 +214,7 @@ de-CH:
         civil_partnership: Eingetragene Partnerschaft
         divorced: Geschieden
       employment:
-        employee_id: Mitarbeiter
+        employee_id: Member
         start_date: Startdatum
         end_date: Enddatum
         percent: Beschäftigungsgrad
@@ -223,6 +232,34 @@ de-CH:
         name: Name
       employment_roles_employment:
         percent: Pensum
+      expense:
+        id: Spesennummer
+        amount: Betrag
+        description: Beschreibung
+        employee_id: Member
+        kind: Spesenart
+        kind_value: Spesenart
+        status_value: Status
+        status: Status
+        order_id: Projekt
+        payment_date: Kaufdatum
+        submission_date: Eingereicht am
+        receipt: Beleg
+        reimbursement_month: Auszahlungsmonat
+        reviewer_id: Visum
+        reason: Begründung / Bemerkung
+        reviewed_at: Visiert am
+      expense/statuses:
+        approved: Freigegeben
+        pending: Offen
+        deferred: In Bearbeitung
+        rejected: Abgelehnt
+      expense/kinds:
+        project: Projekt
+        sales: Verkauf / Kundenbetreuung
+        support: Teamevent / Mitarbeiterbetreuung
+        training: Aus- / Weiterbildung
+        other: Weitere
       holiday:
         holiday_date: Datum
         musthours_day: Muss Stunden
@@ -232,7 +269,7 @@ de-CH:
         billing_date: Rechnungsdatum
         calculated_total_amount: Total Leistungen
         due_date: Fälligkeitsdatum
-        employees: Mitarbeiter
+        employees: Members
         grouping: Gruppierung
         invoice_posts: Rechnungspositionen
         manual_invoice: Manuelle Rechnung
@@ -285,7 +322,7 @@ de-CH:
       order/order_contacts:
         contact: Ansprechsperson
       order/team_members:
-        employee: Mitarbeiter
+        employee: Member
       order_kind:
         name: Bezeichnung
       order_status:
@@ -318,11 +355,11 @@ de-CH:
         medium: mittel
         high: gross
       overtime_vacation:
-        employee_id: Mitarbeiter
+        employee_id: Member
         hours: Stunden
         transfer_date: Umgebucht am
       planning:
-        employee_id: Mitarbeiter
+        employee_id: Member
         work_item_id: Position
         project_id: Projekt
         start_week: Start
@@ -376,7 +413,7 @@ de-CH:
         work_item: Buchungsposition
         work_item_id: Buchungsposition
         absence: Absenz
-        employee_id: Mitarbeiter
+        employee_id: Member
         report_type: Reporttyp
         work_date: Datum
         hours: Stunden
@@ -384,6 +421,7 @@ de-CH:
         to_end_time: Bis
         description: Bemerkungen
         billable: Verrechenbar
+        meal_compensation: Verpflegungsentschädigung
         ticket: Ticket
         account: Buchungsposition
         invoice_id: Rechnung

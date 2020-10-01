@@ -3,9 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class EmployeeMasterDataController < ApplicationController
-
   delegate :model_class, to: 'self.class'
 
   helper_method :model_class
@@ -34,6 +32,10 @@ class EmployeeMasterDataController < ApplicationController
                                   })
                         .find(params[:id])
     authorize!(:read, @employee)
+
+    unless can?(:social_insurance, @employee)
+      @employee.social_insurance = nil
+    end
 
     respond_to do |format|
       format.html
@@ -115,5 +117,4 @@ class EmployeeMasterDataController < ApplicationController
     fullname: 'fullname',
     current_percent_value: 'current_percent_value'
   }.with_indifferent_access
-
 end

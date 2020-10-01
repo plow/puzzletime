@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: invoices
@@ -100,6 +99,14 @@ class InvoiceTest < ActiveSupport::TestCase
     invoice.valid?
     assert_equal 28, invoice.total_hours.to_f
     assert_equal 3920, invoice.total_amount.to_f
+  end
+
+  test 'rounds total_amount to nearest 5 cents' do
+    accounting_posts(:webauftritt).update_attribute(:offered_rate,  1.01)
+    invoice.valid?
+
+    assert_equal 28.28, invoice.send(:positions).collect(&:total_amount).sum.to_f
+    assert_equal 28.30, invoice.total_amount.to_f
   end
 
   test 'manual_invoice? is true only when grouping == "manual"' do
@@ -291,7 +298,6 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal ['Fehler im Invoicing Service: some invoicing error'], invoice.errors[:base]
   end
 
-
   private
 
   def invoice
@@ -302,12 +308,11 @@ class InvoiceTest < ActiveSupport::TestCase
     @invoice_with_category ||= begin
       order = orders(:hitobito_demo)
       Fabricate(:contract, order: order) unless order.contract
-      Fabricate(:invoice, {
-        order: order,
-        work_items: [work_items(:hitobito_demo_app)],
-        employees: [employees(:pascal)],
-        period_to: Time.zone.today.at_end_of_month
-      })
+      Fabricate(:invoice,
+                order: order,
+                work_items: [work_items(:hitobito_demo_app)],
+                employees: [employees(:pascal)],
+                period_to: Time.zone.today.at_end_of_month)
     end
   end
 end

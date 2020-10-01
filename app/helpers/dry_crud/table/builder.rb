@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 module DryCrud::Table
   # A simple helper to easily define tables listing several rows of the same
   # data type.
@@ -112,7 +111,7 @@ module DryCrud::Table
     def html_row(entry)
       attrs = @row_attrs ? @row_attrs.call(entry) : {}
       attrs[:id] ||= dom_id(entry) if entry.respond_to?(:to_key)
-      content_tag_nested(:tr, cols, attrs) { |c| c.html_cell(entry) }
+      content_tag_nested(:tr, cols, attrs) { |c| c.html_cell(entry, options[:responsive]) }
     end
 
     # Determines the class of the table entries.

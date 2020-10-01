@@ -1,11 +1,11 @@
+# -*- coding: utf-8 -*-
+
 #  Copyright (c) 2006-2017, Puzzle ITC GmbH. This file is part of
 #  PuzzleTime and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 class ExtendedCapacityReport
-
   def initialize(current_period)
     @period = current_period
   end
@@ -24,7 +24,7 @@ class ExtendedCapacityReport
   private
 
   def add_header(csv)
-    csv << ['Mitarbeiter',
+    csv << ['Member',
             'Auftrag Organisationseinheit',
             'Beschäftigungsgrad (%)',
             'Soll Arbeitszeit (h)',
@@ -104,6 +104,7 @@ class ExtendedCapacityReport
       non_billable_hours = extract_billable_hours(times, false)
 
       next unless (billable_hours + non_billable_hours).abs > 0.001
+
       rows << build_employee_row(employee, work_item,
                                  billable_hours: billable_hours,
                                  non_billable_hours: non_billable_hours)
@@ -120,6 +121,7 @@ class ExtendedCapacityReport
                        extract_billable_hours(times, true)
 
       next unless internal_hours.abs > 0.001
+
       rows << build_employee_row(employee, work_item,
                                  internal_hours: internal_hours)
     end
@@ -223,5 +225,4 @@ class ExtendedCapacityReport
   def format_date(date)
     I18n.l(date, format: '%Y%m%d')
   end
-
 end

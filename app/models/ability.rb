@@ -3,8 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
-# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 class Ability
   include CanCan::Ability
 
@@ -18,6 +16,8 @@ class Ability
       management_abilities
     elsif user.order_responsible?
       order_responsible_abilities
+    elsif user.is_a?(ApiClient)
+      api_client_abilities
     end
 
     everyone_abilities
@@ -34,6 +34,7 @@ class Ability
          Contact,
          Department,
          Employment,
+         Expense,
          Holiday,
          Contract,
          Order,
@@ -61,6 +62,7 @@ class Ability
          :update_reviewed_worktimes,
          :manage_plannings,
          :show_worktime_graph,
+         :social_insurance,
          :log],
         Employee
 
@@ -86,7 +88,7 @@ class Ability
     end
 
     can [:read], Worktime
-    can [:create], Absencetime
+    can [:create, :destroy], Absencetime
     can [:create, :update, :destroy], Ordertime do |t|
       !t.work_item_closed? && !t.invoice_sent_or_paid?
     end
@@ -103,7 +105,8 @@ class Ability
          :absences,
          :employeeabsences,
          :capacity_report,
-         :role_distribution_report],
+         :export_report,
+         :meal_compensation],
         Evaluation
   end
 
@@ -133,8 +136,11 @@ class Ability
       i.order.responsible_id == user.id
     end
     can [:edit, :update, :destroy], Invoice do |i|
-      i.order.responsible_id == user.id &&
-        !%w(deleted paid partially_paid).include?(i.status)
+      is_responsible     = (i.order.responsible_id == user.id)
+      is_open            = !%w(deleted paid partially_paid).include?(i.status)
+      is_manual_and_used = (i.manual? && i.total_amount > 1)
+
+      is_responsible && is_open && !is_manual_and_used
     end
 
     can :read, Ordertime do |t|
@@ -148,6 +154,12 @@ class Ability
     can :manage, Planning do |planning|
       planning.order.responsible_id == user.id
     end
+
+    can :revenue_reports, Department
+    can :social_insurance, Employee
+  end
+
+  def api_client_abilities
   end
 
   def everyone_abilities
@@ -177,6 +189,7 @@ class Ability
          :update_settings,
          :update_committed_worktimes,
          :show_worktime_graph,
+         :social_insurance,
          :manage_plannings],
         Employee,
         id: user.id
@@ -186,6 +199,7 @@ class Ability
     can [:read,
          :accounting_posts,
          :controlling,
+         :create_comment,
          :search,
          :services,
          :show_targets,
@@ -199,7 +213,7 @@ class Ability
 
     can :show_plannings, AccountingPost
 
-    can :read, [AccountingPost, Invoice, OrderUncertainty, OrderComment]
+    can :read, [AccountingPost, Invoice, OrderUncertainty]
 
     can :read, Planning
     can :manage, Planning, employee_id: user.id
@@ -216,5 +230,9 @@ class Ability
          :workitememployees,
          :orderworkitems],
         Evaluation
+
+    can :manage, Expense, employee_id: user.id
+
+    can [:create, :read], OrderComment
   end
 end

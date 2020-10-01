@@ -3,19 +3,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 # == Schema Information
 #
 # Table name: additional_crm_orders
 #
-#  id       :integer          not null, primary key
-#  order_id :integer          not null
+#  id       :bigint(8)        not null, primary key
+#  order_id :bigint(8)        not null
 #  crm_key  :string           not null
 #  name     :string
 #
 
 class AdditionalCrmOrder < ActiveRecord::Base
-
   belongs_to :order
 
   validates_by_schema
@@ -35,5 +33,4 @@ class AdditionalCrmOrder < ActiveRecord::Base
       Crm.instance.delay.sync_additional_order(self)
     end
   end
-
 end

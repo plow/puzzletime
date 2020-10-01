@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/puzzle/puzzletime.
 
-
 require 'test_helper'
 
 class EmployeesControllerTest < ActionController::TestCase
@@ -66,6 +65,7 @@ class EmployeesControllerTest < ActionController::TestCase
       ldapname: 'fmuster',
       management: false,
       department_id: departments(:devone).id,
-      probation_period_end_date: Date.new(2015, 10, 3) }
+      probation_period_end_date: Date.new(2015, 10, 3),
+      nationalities: ['CH', 'DE'] }
   end
 end
